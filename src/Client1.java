@@ -11,23 +11,26 @@ public class Client1 {
 
 
 	private int port;
-	private InetAddress ia;
+	private static InetAddress ia;
 	private DatagramSocket socket = null;
-	private static Scanner input;
+	public static Scanner input = new Scanner(System.in);;
 	ConcurrentLinkedQueue<DatagramPacket> message = new ConcurrentLinkedQueue<DatagramPacket>();
 	
 	
-	public Client1(int port) throws SocketException, UnknownHostException {
-		this.port = port;
+	
+	// UDP needs a special socket called datagram socket to specify 
+	//where the packet is being sent to
+	public Client1() throws SocketException, UnknownHostException {
+//		this.port = port;
 		
 		InetAddress ip = ia.getLocalHost();
 //		
-		this.socket = new DatagramSocket(port, ip);
+		this.socket = new DatagramSocket();
 		
 		Thread rThread = new Thread(
 				new Runnable () {
 				public void run(){
-					recieve();
+					recieveT();
 			}
 		});
 		rThread.setName("Receive Thread For Port = "+ this.port);
@@ -35,13 +38,23 @@ public class Client1 {
 	}
 	
 	
-	public String input () {
+	
+	public static int portNum() {
+		System.out.print("Enter port number: ");
 		input = new Scanner(System.in);
+		int port = input.nextInt();
+		return port;
+	}
+	
+	public String input () {
+		System.out.print("Enter message: ");
 		String i = input.nextLine();
 		return i;
 	}
 	
-	public void recieve() {
+	//to accept the data you need a new datagram packet 
+   //to receive the data you don't need the port 
+	public void recieveT() {
 		do {
 			byte[] b1 = new byte[1024];
 			for ( int i = 0 ; i < b1.length ; i++ ) {
@@ -56,19 +69,29 @@ public class Client1 {
 				System.exit(-1);
 			}
 			
-			
+			//to receive the datagram packet
 			String str = new String(datapacket1.getData());
+			message.add(datapacket1);
 			System.out.print("result: " + str);
 		}
 		while(true);
 	}
 	
+	
+	public DatagramPacket receive() {
+		return message.poll();
+	}
+	
+	// to send a data to a server you use a datagram packet
+	//To use a datagram packet it takes 4 parameters data sent, data length, IP address, port number
 	public void send(String str1, InetAddress destIP, int port ) {
 		byte[] b;
 		
 		try {
 			b = (str1 +"").getBytes();
 			DatagramPacket datapacket2 = new DatagramPacket(b,b.length, destIP, port);
+			datapacket2.setAddress(destIP);
+			datapacket2.setPort(port);
 			socket.send(datapacket2);
 			
 		}catch(Exception e) {
@@ -80,6 +103,16 @@ public class Client1 {
 
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
+		
+		
+		InetAddress ip = ia.getLocalHost();
+		Client1 client = new Client1();
+		client.send(client.input(),ip ,1337);
+		
+		
+		
+		
+		
 		
 		// UDP needs a special socket called datagram socket to specify 
 		//where the packet is being sent to
@@ -96,10 +129,10 @@ public class Client1 {
 //			DatagramPacket datapacket = new DatagramPacket(b,b.length, ia, 64000);
 //			datasocket.send(datapacket);
 			
-			byte[] b1 = new byte[1024];
-			//to accept the data you need a new datagram packet 
-			//to receive the data you don't need the port 
-			DatagramPacket datapacket1 = new DatagramPacket(b1, b1.length);
+//			byte[] b1 = new byte[1024];
+//			//to accept the data you need a new datagram packet 
+//			//to receive the data you don't need the port 
+//			DatagramPacket datapacket1 = new DatagramPacket(b1, b1.length);
 			
 			//to receive the datagram packet
 //			datasocket.receive(datapacket1);

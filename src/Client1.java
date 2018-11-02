@@ -72,7 +72,7 @@ public class Client1 {
 			//to receive the datagram packet
 			String str = new String(datapacket1.getData());
 			message.add(datapacket1);
-			System.out.print("result: " + str);
+			System.out.println("result: " + str + "\n");
 		}
 		while(true);
 	}

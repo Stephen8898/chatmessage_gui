@@ -20,9 +20,8 @@ public class Server1 {
 		DatagramPacket datapacket = new DatagramPacket(b1,  b1.length);
 		datasocket.receive(datapacket);
 		String str = new String(datapacket.getData());
-		System.out.print(str);
 		String reverse = "";
-		for(int i = str.length() -1; 0 < i; ) {
+		for(int i = str.length() -1; 0 <= i; i--) {
 			reverse =  reverse + str.charAt(i);
 			
 		}
@@ -33,7 +32,6 @@ public class Server1 {
 		//Once data is gotten we will want to send it back to client
 		
 		byte[] b2  = (reverse + "").getBytes();
-		System.out.print(reverse);
 		InetAddress ia = InetAddress.getLocalHost(); 
 		DatagramPacket datapacket1 = new DatagramPacket(b2, b2.length,ia, datapacket.getPort());
 		datasocket.send(datapacket1);

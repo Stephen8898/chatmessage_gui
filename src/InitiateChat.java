@@ -85,41 +85,16 @@ public class InitiateChat extends JFrame {
 			
 		});
 		//panelS.add(connect);
-		
 		setVisible(true);
-		
-	DatagramPacket packet= null;
-		
 		do {
-			packet = socket.receive();
-			
-			if(packet != null) {
-				System.out.println("Receiving packet");
-				String ip = packet.getAddress().getHostAddress();
-				
-				int port = packet.getPort();
-						
-				String msg = new String(packet.getData());
-				
-				if(!newChat.containsKey(ip)) {
-					System.out.println("here");
-					ChatApp newchat = new ChatApp(socket, ip, port);
-					newChat.put(ip, newchat);
-					newchat.getText().append("Them: " + msg + "\n");
-					newchat.setVisible(true);
-				} else {
-					ChatApp currentChat = newChat.get(ip);
-					currentChat.getText().append("Them: " + msg + "\n");
-					currentChat.setVisible(true);
-					System.out.println(msg);
-				}
-			}
-		} while (true);
+		recieve();
+		}while (true);
 		
 		
+	
 		
 	}
-	/*
+	
 	public static void recieve() {
 			DatagramPacket packet= null;
 		
@@ -127,15 +102,12 @@ public class InitiateChat extends JFrame {
 			packet = socket.receive();
 			
 			if(packet != null) {
-				System.out.println("Receiving packet");
 				String ip = packet.getAddress().getHostAddress();
 				
 				int port = packet.getPort();
 						
 				String msg = new String(packet.getData());
-				
 				if(!newChat.containsKey(ip)) {
-					System.out.println("here");
 					ChatApp newchat = new ChatApp(socket, ip, port);
 					newChat.put(ip, newchat);
 					newchat.getText().append("Them: " + msg + "\n");
@@ -151,11 +123,11 @@ public class InitiateChat extends JFrame {
 		
 	}
 	
-*/
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		InitiateChat ichat = new InitiateChat();
-//		recieve();
+
 	}
 	
 	

@@ -2,4 +2,4 @@
 
 This is a chat message application 
 
-It uses the UDP protoccol to send packets through the network to communicat with other users
+It uses the UDP protoccol to send packets through the network to communicate with other users
